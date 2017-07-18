@@ -1,15 +1,26 @@
 package main
 
+// #cgo LDFLAGS: -lX11
+// #include <stdlib.h>
+// #include <X11/Xresource.h>
+// char * getAddr(XrmValue val) {
+//		return val.addr;
+// }
+import "C"
+
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
-	"os/exec"
 	"strconv"
-	"strings"
 )
+
+var dpy *C.Display
+var xrm *C.char
+var xrdb C.XrmDatabase
 
 func exists(dp string, isDir bool) bool {
 	fi, err := os.Stat(dp)
@@ -24,15 +35,48 @@ func exists(dp string, isDir bool) bool {
 }
 
 func getXColor(res string) string {
-	buf, err := exec.Command("xrq", res).Output()
-	if err != nil {
-		log.Println(err)
+	var t *C.char
+	var xvalue C.XrmValue
+
+	C.XrmGetResource(xrdb, C.CString(res), C.CString("*"), &t, &xvalue)
+
+	if C.getAddr(xvalue) != nil {
+		return C.GoString(C.getAddr(xvalue))
+	} else {
 		return ""
 	}
-	return strings.TrimSpace(string(buf))
+}
+
+func getXrdb() error {
+	dpy = C.XOpenDisplay(nil)
+	if dpy == nil {
+		return errors.New("could not open display")
+	}
+
+	C.XrmInitialize()
+	xrm = C.XResourceManagerString(dpy)
+
+	if xrm == nil {
+		return errors.New("could not get resource properties")
+	}
+
+	xrdb = C.XrmGetStringDatabase(xrm)
+
+	return nil
+}
+
+func freeXrdb() {
+	C.XrmDestroyDatabase(xrdb)
+	C.XFlush(dpy)
+	C.XCloseDisplay(dpy)
 }
 
 func colorsCSSHandler(w http.ResponseWriter, r *http.Request) {
+	err := getXrdb()
+	if err != nil {
+		return
+	}
+
 	fmt.Fprintln(w, ":root {")
 
 	fmt.Fprintf(w, "--fg-color: %s;\n", getXColor("*foreground"))
@@ -44,6 +88,7 @@ func colorsCSSHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Fprintln(w, "}")
+	freeXrdb()
 }
 
 func main() {

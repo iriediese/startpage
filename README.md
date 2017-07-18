@@ -4,8 +4,8 @@ Serves a static site as a startpage and a `/colors.txt` file dynamically generat
 
 ## Dependencies
 
-* [xrq](https://github.com/arianon/xrq)
+* `libX11`
 
 ## To Do
 
-* [ ] Remove `xrq` as a dependency. Use `cgo` instead.
+* [x] Remove `xrq` as a dependency. Use `cgo` instead.
