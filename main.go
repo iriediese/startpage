@@ -34,7 +34,7 @@ func exists(dp string, isDir bool) bool {
 	}
 }
 
-func getXColor(res string) string {
+func getXRes(res string) string {
 	var t *C.char
 	var xvalue C.XrmValue
 
@@ -80,12 +80,12 @@ func colorsCSSHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/css")
 	fmt.Fprintln(w, ":root {")
 
-	fmt.Fprintf(w, "--fg-color: %s;\n", getXColor("*foreground"))
-	fmt.Fprintf(w, "--bg-color: %s;\n", getXColor("*background"))
-	fmt.Fprintf(w, "--cr-color: %s;\n", getXColor("*cursorColor"))
+	fmt.Fprintf(w, "--fg-color: %s;\n", getXRes("*foreground"))
+	fmt.Fprintf(w, "--bg-color: %s;\n", getXRes("*background"))
+	fmt.Fprintf(w, "--cr-color: %s;\n", getXRes("*cursorColor"))
 
 	for i := 0; i < 16; i++ {
-		fmt.Fprintf(w, "--color%d: %s;\n", i, getXColor("*color"+strconv.Itoa(i)))
+		fmt.Fprintf(w, "--color%d: %s;\n", i, getXRes("*color"+strconv.Itoa(i)))
 	}
 
 	fmt.Fprintln(w, "}")
