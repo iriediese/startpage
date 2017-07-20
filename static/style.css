@@ -1,0 +1,85 @@
+html, body {
+	width: 100%;
+	height: 100%;
+}
+html, body, ul {
+	margin: 0;
+	padding: 0;
+}
+body {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--bg-color);
+	color: var(--fg-color);
+	font-family: "Gohu GohuFont";
+	font-size: 11px;
+	font-weight: normal;
+}
+
+main {
+	display: block;
+	width: 50%;
+	height: 50%;
+}
+
+h1 {
+	display: block;
+	margin: 0 auto;
+	font-family: Terminus;
+	font-size: 32px;
+	font-weight: normal;
+	color: var(--color14);
+}
+
+ul {
+	display: block;
+	margin: 5px auto;
+}
+
+li {
+	font-family: "Gohu GohuFont";
+	font-size: 14px;
+	font-weight: bold;
+	color: var(--color9);
+
+	display: inline-block;
+	list-style: none;
+	margin: 0 5px;
+	width: 150px;
+}
+
+a {
+	color: var(--color2);
+	text-decoration: none;
+	font-weight: normal;
+	transition: .2s;
+}
+
+a:hover {
+	color: var(--color10);
+}
+
+hr {
+	border: 0;
+	border-top: 1px solid var(--color8);
+	width: 100%;
+	margin: 5px auto 10px auto;
+}
+
+input {
+	background: var(--color0);
+	border: none;
+	height: 25px;
+	width: 100%;
+	padding: 5px 0 5px 10px;
+	font-family: "Gohu GohuFont";
+	font-size: 11px;
+	font-weight: normal;
+	color: var(--color15);
+}
+
+input::placeholder {
+	color: var(--color7);
+}
