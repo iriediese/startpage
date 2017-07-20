@@ -77,6 +77,7 @@ func colorsCSSHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	w.Header().Set("Content-Type", "text/css")
 	fmt.Fprintln(w, ":root {")
 
 	fmt.Fprintf(w, "--fg-color: %s;\n", getXColor("*foreground"))
