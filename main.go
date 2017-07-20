@@ -12,9 +12,11 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"go/build"
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strconv"
 )
 
@@ -95,7 +97,15 @@ func colorsCSSHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	var startpagePath, listenAddress string
 
-	flag.StringVar(&startpagePath, "path", "static", "path to the startpage")
+	flag.StringVar(
+		&startpagePath,
+		"path",
+		filepath.Join(
+			build.Default.GOPATH,
+			"src/github.com/tudurom/startpage/static",
+		),
+		"path to the startpage",
+	)
 	flag.StringVar(&listenAddress, "listen", ":8081", "address to listen for http connections")
 	flag.Parse()
 
