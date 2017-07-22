@@ -1,28 +1,16 @@
 package main
 
-// #cgo LDFLAGS: -lX11
-// #include <stdlib.h>
-// #include <X11/Xresource.h>
-// char * getAddr(XrmValue val) {
-//		return val.addr;
-// }
-import "C"
-
 import (
-	"errors"
 	"flag"
 	"fmt"
 	"go/build"
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strconv"
 )
-
-var dpy *C.Display
-var xrm *C.char
-var xrdb C.XrmDatabase
 
 func exists(dp string, isDir bool) bool {
 	fi, err := os.Stat(dp)
@@ -36,62 +24,76 @@ func exists(dp string, isDir bool) bool {
 	}
 }
 
-func getXRes(res string) string {
-	var t *C.char
-	var xvalue C.XrmValue
-
-	C.XrmGetResource(xrdb, C.CString(res), C.CString("*"), &t, &xvalue)
-
-	if C.getAddr(xvalue) != nil {
-		return C.GoString(C.getAddr(xvalue))
+func getXRes(col string) string {
+	var q, s string
+	if len(col) <= 2 {
+		q = "*color" + col
 	} else {
-		return ""
-	}
-}
-
-func getXrdb() error {
-	dpy = C.XOpenDisplay(nil)
-	if dpy == nil {
-		return errors.New("could not open display")
+		q = "*" + col
 	}
 
-	C.XrmInitialize()
-	xrm = C.XResourceManagerString(dpy)
+	b, err := exec.Command("xrq", q).Output()
+	if err == nil {
+		s = string(b)
+	} else {
+		switch col {
+		case "0":
+			s = COLOR0
+		case "1":
+			s = COLOR1
+		case "2":
+			s = COLOR2
+		case "3":
+			s = COLOR3
+		case "4":
+			s = COLOR4
+		case "5":
+			s = COLOR5
+		case "6":
+			s = COLOR6
+		case "7":
+			s = COLOR7
+		case "8":
+			s = COLOR8
+		case "9":
+			s = COLOR9
+		case "10":
+			s = COLOR10
+		case "11":
+			s = COLOR11
+		case "12":
+			s = COLOR12
+		case "13":
+			s = COLOR13
+		case "14":
+			s = COLOR14
+		case "15":
+			s = COLOR15
 
-	if xrm == nil {
-		return errors.New("could not get resource properties")
+		case "background":
+			s = COLORBG
+		case "foreground":
+			s = COLORFG
+		default:
+			s = COLORCU
+		}
 	}
-
-	xrdb = C.XrmGetStringDatabase(xrm)
-
-	return nil
-}
-
-func freeXrdb() {
-	C.XrmDestroyDatabase(xrdb)
-	C.XFlush(dpy)
-	C.XCloseDisplay(dpy)
+	return s
 }
 
 func colorsCSSHandler(w http.ResponseWriter, r *http.Request) {
-	err := getXrdb()
-	if err != nil {
-		return
-	}
-
 	w.Header().Set("Content-Type", "text/css")
 	fmt.Fprintln(w, ":root {")
 
-	fmt.Fprintf(w, "--fg-color: %s;\n", getXRes("*foreground"))
-	fmt.Fprintf(w, "--bg-color: %s;\n", getXRes("*background"))
-	fmt.Fprintf(w, "--cr-color: %s;\n", getXRes("*cursorColor"))
+	fmt.Fprintf(w, "--fg-color: %s;\n", getXRes("foreground"))
+	fmt.Fprintf(w, "--bg-color: %s;\n", getXRes("background"))
+	fmt.Fprintf(w, "--cr-color: %s;\n", getXRes("cursorColor"))
 
 	for i := 0; i < 16; i++ {
-		fmt.Fprintf(w, "--color%d: %s;\n", i, getXRes("*color"+strconv.Itoa(i)))
+		fmt.Fprintf(w, "--color%d: %s;\n", i, getXRes(strconv.Itoa(i)))
 	}
 
 	fmt.Fprintln(w, "}")
-	freeXrdb()
 }
 
 func main() {
