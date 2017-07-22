@@ -13,7 +13,7 @@ body {
 	justify-content: center;
 	background-color: var(--bg-color);
 	color: var(--fg-color);
-	font-family: "Gohu GohuFont";
+	font-family: "Gohu GohuFont", Cousine;
 	font-size: 11px;
 	font-weight: normal;
 }
@@ -27,7 +27,7 @@ main {
 h1 {
 	display: block;
 	margin: 0 auto;
-	font-family: Terminus;
+	font-family: Terminus, "Roboto Slab";
 	font-size: 32px;
 	font-weight: normal;
 	color: var(--color14);
@@ -39,7 +39,7 @@ ul {
 }
 
 li {
-	font-family: "Gohu GohuFont";
+	font-family: "Gohu GohuFont", Cousine;
 	font-size: 14px;
 	font-weight: bold;
 	color: var(--color9);
@@ -74,7 +74,7 @@ input {
 	height: 25px;
 	width: 100%;
 	padding: 5px 0 5px 10px;
-	font-family: "Gohu GohuFont";
+	font-family: "Gohu GohuFont", Cousine;
 	font-size: 11px;
 	font-weight: normal;
 	color: var(--color15);
