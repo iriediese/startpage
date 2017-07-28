@@ -10,6 +10,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strconv"
+	"strings"
 )
 
 func exists(dp string, isDir bool) bool {
@@ -34,7 +35,7 @@ func getXRes(col string) string {
 
 	b, err := exec.Command("xrq", q).Output()
 	if err == nil {
-		s = string(b)
+		s = strings.TrimSpace(string(b))
 	} else {
 		switch col {
 		case "0":
