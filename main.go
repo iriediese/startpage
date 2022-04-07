@@ -103,10 +103,10 @@ func main() {
 	flag.StringVar(
 		&startpagePath,
 		"path",
-		"/home/tedi/sources/me/startpage/static",
+		"/home/tedi/sources/startpage/static",
 		"path to the startpage",
 	)
-	flag.StringVar(&listenAddress, "listen", ":8081", "address to listen for http connections")
+	flag.StringVar(&listenAddress, "listen", ":443", "address to listen for http connections")
 	flag.Parse()
 
 	// checking flags
@@ -118,7 +118,7 @@ func main() {
 	http.Handle("/", fs)
 	http.HandleFunc("/colors.css", colorsCSSHandler)
 	log.Println("Listening on " + listenAddress)
-	err := http.ListenAndServe(listenAddress, nil)
+	err := http.ListenAndServeTLS(listenAddress, "/home/tedi/ssl/server.crt", "/home/tedi/ssl/server.key", nil)
 
 	if err != nil {
 		log.Fatal(err)
