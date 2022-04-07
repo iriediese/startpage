@@ -3,12 +3,12 @@ package main
 import (
 	"flag"
 	"fmt"
-	"go/build"
+//	"go/build"
 	"log"
 	"net/http"
 	"os"
 	"os/exec"
-	"path/filepath"
+//	"path/filepath"
 	"strconv"
 	"strings"
 )
@@ -39,44 +39,44 @@ func getXRes(col string) string {
 	} else {
 		switch col {
 		case "0":
-			s = COLOR0
+			s = "#050D18"
 		case "1":
-			s = COLOR1
+			s = "#345268"
 		case "2":
-			s = COLOR2
+			s = "#486176"
 		case "3":
-			s = COLOR3
+			s = "#3B6B84"
 		case "4":
-			s = COLOR4
+			s = "#53738A"
 		case "5":
-			s = COLOR5
+			s = "#647B90"
 		case "6":
-			s = COLOR6
+			s = "#6C8EA6"
 		case "7":
-			s = COLOR7
+			s = "#b4cad9"
 		case "8":
-			s = COLOR8
+			s = "#7d8d97"
 		case "9":
-			s = COLOR9
+			s = "#345268"
 		case "10":
-			s = COLOR10
+			s = "#486176"
 		case "11":
-			s = COLOR11
+			s = "#3B6B84"
 		case "12":
-			s = COLOR12
+			s = "#53738A"
 		case "13":
-			s = COLOR13
+			s = "#647B90"
 		case "14":
-			s = COLOR14
+			s = "#6C8EA6"
 		case "15":
-			s = COLOR15
+			s = "#b4cad9"
 
 		case "background":
-			s = COLORBG
+			s = "#050D18"
 		case "foreground":
-			s = COLORFG
-		default:
-			s = COLORCU
+			s = "#b4cad9"
+		default: // cursor color
+			s = "#c5c8c6"
 		}
 	}
 	return s
@@ -103,10 +103,7 @@ func main() {
 	flag.StringVar(
 		&startpagePath,
 		"path",
-		filepath.Join(
-			build.Default.GOPATH,
-			"src/github.com/tudurom/startpage/static",
-		),
+		"/home/tedi/sources/me/startpage/static",
 		"path to the startpage",
 	)
 	flag.StringVar(&listenAddress, "listen", ":8081", "address to listen for http connections")

@@ -58,7 +58,7 @@ a {
 }
 
 a:hover {
-	color: var(--color10);
+	color: var(--color8);
 }
 
 hr {
@@ -71,13 +71,16 @@ hr {
 input {
 	background: var(--color0);
 	border: none;
-	height: 25px;
+	height: 35px;
 	width: 100%;
 	padding: 5px 0 5px 10px;
 	font-family: "Gohu GohuFont", Cousine;
-	font-size: 11px;
+	font-size: 14px;
 	font-weight: normal;
 	color: var(--color15);
+}
+input:focus {
+	outline: solid var(--color8);
 }
 
 input::placeholder {
